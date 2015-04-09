@@ -6,8 +6,11 @@
 
 % ----------- Load Ressources ------------ %
 
-I1 = im2double(imread('links_1.png'));
-I2 = im2double(imread('rechts_1.png'));
+% I1 = im2double(imread('links_1.png'));
+% I2 = im2double(imread('rechts_1.png'));
+
+I1 = im2double(imread('links_1_masked.png'));
+I2 = im2double(imread('rechts_1_masked.png'));
 
 load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
 
@@ -30,7 +33,7 @@ load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
 % ----------- Disparities ------------ %
 
 %disparityMap = disparity(rgb2gray(J1), rgb2gray(J2), 'DisparityRange', [0 512], 'BlockSize', 5, 'ContrastThreshold', 0.75);
-disparityMap = disparity(rgb2gray(J1), rgb2gray(J2), 'DisparityRange', [0 560], 'BlockSize', 5, 'ContrastThreshold', 0.75);
+disparityMap = disparity(rgb2gray(J1), rgb2gray(J2), 'DisparityRange', [0 560], 'BlockSize', 7, 'ContrastThreshold', 0.5);
 
 figure;
 imshow(disparityMap, [0, 512], 'InitialMagnification', 50);
