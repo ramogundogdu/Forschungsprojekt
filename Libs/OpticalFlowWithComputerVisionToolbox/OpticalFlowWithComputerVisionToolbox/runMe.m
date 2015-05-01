@@ -25,15 +25,15 @@
 % synthetic video sequence(created on the fly), or load a video through a
 % video file (such as 'LipVid.avi'), or to capture video from a connected
 % camera(requires the image acquisition toolbox). 
-%   movieType = 'lipVid.avi'; %assumes a file 'LipVid.avi' in current folder
+movieType = 'lipVid.avi'; %assumes a file 'LipVid.avi' in current folder
 %  movieType = 'camera'; %assumes a camera available in the system.
- movieType = 'camera2'; %for any integer, use when choosing between several cameras
+% movieType = 'camera2'; %for any integer, use when choosing between several cameras
 %    movieType = 'synthetic'; %generate synthetic video
     
 %%%%% argument 'method'      %%%%%%%%
 %%%%%  optical flow method.  %%%%%%%
-% method = 'Horn-Schunck';
-method = 'Lucas-Kanade';
+method = 'Horn-Schunck';
+%method = 'Lucas-Kanade';
 
 
 %%% see documentation on "vision.OpticalFlow" for a large amount of tunable
@@ -43,7 +43,7 @@ opticalFlow = vision.OpticalFlow('Method',method,'OutputValue','Horizontal and v
 
 %scale the flow for visualization. Different methods and settings puts the
 %flow vectors in different ranges. Change if you see no or little color
-sc = 1; 
+sc = 5; 
 
 disp('Shut down figure to stop.');
 [curIm, V] = vidProcessingToolbox(movieType, opticalFlow,sc);
