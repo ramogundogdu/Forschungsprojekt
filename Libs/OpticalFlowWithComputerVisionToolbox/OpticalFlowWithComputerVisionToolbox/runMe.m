@@ -22,12 +22,21 @@
 
 %%%%% argument 'movieType' %%%%%%%%
 % This indicates the source of the video to process. You may choose from a
+<<<<<<< Updated upstream
 % synthetic video sequence(created on the fly), or load a video through a
 % video file (such as 'LipVid.avi'), or to capture video from a connected
 % camera(requires the image acquisition toolbox). 
 movieType = 'lipVid.avi'; %assumes a file 'LipVid.avi' in current folder
 %  movieType = 'camera'; %assumes a camera available in the system.
 % movieType = 'camera2'; %for any integer, use when choosing between several cameras
+=======
+% % synthetic video sequence(created on the fly), or load a video through a
+% % video file (such as 'LipVid.avi'), or to capture video from a connected
+% %     camera(requires the image acquisition toolbox). 
+%      movieType = 'lipVid.avi'; %assumes a file 'LipVid.avi' in current folder
+ movieType = 'links.avi'; %assumes a camera available in the system.
+%  movieType = 'rechts.avi'; %for any integer, use when choosing between several cameras
+>>>>>>> Stashed changes
 %    movieType = 'synthetic'; %generate synthetic video
     
 %%%%% argument 'method'      %%%%%%%%

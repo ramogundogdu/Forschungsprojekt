@@ -1,0 +1,13 @@
+im1 = imread('frame10.png');
+im2 = imread('frame11.png');
+flowIm = uv2;
+
+x = im1(1,:,:);
+y = im1(:,1,:);
+
+dispVector = flowIm(x,y);%Datenstruktur anpassen
+pWarped = [x y]'+dispVector;%Datenstruktur anpassen
+
+warping = warp( im1,im2, flowIm )
+
+
