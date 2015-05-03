@@ -45,3 +45,7 @@ visualizeOpticalFlow( UVFlowCell );
 % ------------------------------------------------------------
 % compute the backwarped rekonstruktion
 BackwarpedStruct = backwardWarpingSequence(OrigVidStruct, UVFlowCell);
+
+% ------------------------------------------------------------
+% compute error analysis struct
+WarpErrorStruct = WarpError(OrigVidStruct, BackwarpedStruct);
