@@ -1,0 +1,16 @@
+OPTICAL FLOW ESTIMATION METHODS:
+
+
+1 - classic+nl-fast: 		max flow: 4.3620 flow range: u = -4.344 .. 2.490; v = -2.302 .. 2.719
+2 - classic+nl:			max flow: 4.4246 flow range: u = -4.392 .. 2.596; v = -2.414 .. 2.700
+3 - classic+nl-full:		max flow: 4.3954 flow range: u = -4.366 .. 2.606; v = -2.357 .. 2.663
+4 - hs-brightness:		max flow: 5.1327 flow range  u = -4.129 .. 2.514; v = -2.879 .. 4.943	
+5 - hs:				max flow: 4.3612 flow range: u = -4.341 .. 2.762; v = -2.326 .. 2.674
+6 - ba-brightness:		max flow: 4.6727 flow range: u = -4.447 .. 2.612; v = -4.254 .. 2.739
+7 - classic-l:			max flow: 4.5061 flow range: u = -4.457 .. 2.651; v = -2.555 .. 2.754
+8 - ba:				max flow: 4.5061 flow range: u = -4.457 .. 2.651; v = -2.555 .. 2.754
+9 - classic-c-a:		max flow: 4.2921 flow range: u = -4.290 .. 2.738; v = -2.281 .. 2.648
+10- classic-c-brightness:	max flow: 5.1327 flow range  u = -4.129 .. 2.514; v = -2.879 .. 4.943
+11- classic-c:			max flow: 4.3705 flow range: u = -4.333 .. 2.541; v = -2.360 .. 2.625
+12- classic++:			max flow: 4.4245 flow range: u = -4.379 .. 2.534; v = -2.442 .. 2.723
+ 
