@@ -49,3 +49,7 @@ BackwarpedStruct = backwardWarpingSequence(OrigVidStruct, UVFlowCell);
 % ------------------------------------------------------------
 % compute error analysis struct
 WarpErrorStruct = WarpError(OrigVidStruct, BackwarpedStruct);
+
+% ------------------------------------------------------------
+% save resulting structs
+save 'oFlowErrorAnalysisData-HD' UVFlowCell BackwarpedStruct WarpErrorStruct;
