@@ -6,11 +6,11 @@
 
 % ----------- Load Ressources ------------ %
 
-% I1 = im2double(imread('links_1.png'));
-% I2 = im2double(imread('rechts_1.png'));
+I1 = im2double(imread('links_1.png'));
+I2 = im2double(imread('rechts_1.png'));
 
-I1 = im2double(imread('links_1_masked.png'));
-I2 = im2double(imread('rechts_1_masked.png'));
+% I1 = im2double(imread('links_1_masked.png'));
+% I2 = im2double(imread('rechts_1_masked.png'));
 
 load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
 
