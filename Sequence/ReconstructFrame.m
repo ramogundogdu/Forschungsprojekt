@@ -66,7 +66,8 @@ function [ Points3D, PointCloud, J1, J2 ] = ReconstructFrame( I1, I2, StereoParm
     % ----------- create exported PointCloud object ------------ %
  
     PointCloud = pointCloud(Points3DSerialized);
-    PointCloud = pcdenoise(PointCloud, 'NumNeighbors', 25);
+    %PointCloud = pcdenoise(PointCloud, 'NumNeighbors', 25);
+    PointCloud = pcdenoise(PointCloud, 'NumNeighbors', 200);
 
 end
 
