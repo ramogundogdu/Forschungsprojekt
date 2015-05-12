@@ -79,3 +79,8 @@ end
 release(videoFileReader);
 release(videoPlayer);
 release(pointTracker);
+
+RoundPoints = round(points);
+RoundVisiblePoints = round(visiblePoints);
+RoundOldInliers = round(oldInliers);
+RoundOldpoints = round(oldPoints);
