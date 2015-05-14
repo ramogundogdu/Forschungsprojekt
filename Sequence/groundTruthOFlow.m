@@ -1,17 +1,15 @@
 function groundTruthOFlowStruct = groundTruthOFlow (groundTruthMap, oFlowMap)
 
-oFlowMap = UVFlowCell(1).cdata;
-% groundTruthMap = ?;
 
+% 
+%  if (groundTruthMap ~= oFlowMap)
+%             error('map size is different');
+%     end
+%  
 
- if (groundTruthMap ~= oFlowMap)
-            error('map size is different');
-    end
- 
-
-for groundTruthOFlowRow = groundTruthOFlow(1:1:end,1); 
+for groundTruthOFlowRow = groundTruthMap(1:1:end,1); 
     
-    for groundTruthOFlowColumn = groundTruthOFlow(1:1:end,:);  
+    for groundTruthOFlowColumn = groundTruthMap(1:1:end,:);  
         
         for oFlowMapRow = oFlowMap(1:1:end,1); 
             
