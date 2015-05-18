@@ -33,23 +33,23 @@ load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
 % ----------- Disparities ------------ %
 
 %disparityMap = disparity(rgb2gray(J1), rgb2gray(J2), 'DisparityRange', [0 512], 'BlockSize', 5, 'ContrastThreshold', 0.75);
-disparityMap = disparity(rgb2gray(J1), rgb2gray(J2), 'DisparityRange', [0 512], 'BlockSize', 5, 'ContrastThreshold', 0.75, 'UniquenessThreshold', 30);
+disparityMap = disparity(rgb2gray(J1), rgb2gray(J2), 'DisparityRange', [0 512], 'BlockSize', 9, 'ContrastThreshold', 0.1, 'UniquenessThreshold', 17);
 
-figure;
-imshow(disparityMap, [0, 512], 'InitialMagnification', 50);
-colormap('jet');
-colorbar;
-title('Disparity Map');
+% figure;
+% imshow(disparityMap, [0, 512], 'InitialMagnification', 50);
+% colormap('jet');
+% colorbar;
+% title('Disparity Map');
 
 % ----------- Reconstruction ------------ %
 
 
 point3D = reconstructScene(disparityMap, stereoParams_Versuch3_Cut);
-
-% Convert from millimeters to meters.
-point3D = point3D;
-
-% Plot points between 3 and 7 meters away from the camera.
+% 
+% % Convert from millimeters to meters.
+% point3D = point3D;
+% 
+% % Plot points between 3 and 7 meters away from the camera.
 z = point3D(:, :, 3);
 maxZ = 850;
 minZ = 630;
