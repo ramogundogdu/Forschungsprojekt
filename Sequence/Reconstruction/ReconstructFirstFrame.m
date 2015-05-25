@@ -15,13 +15,18 @@ I2 = im2double(imread('rechts_1.png'));
 % I1 = readFrame(LeftVid);
 % I2 = readFrame(RightVid);
 
-load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
+
+%load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
+% Right 2 Left Camera Callibration
+load(['Versuch3_V1_R2L/Callib_Versuch3_Cut_Complete_R2L.mat']);
 
 % -------------------------------------------------------------------------------------------------------
 
-[ Points3D, PointCloud, J1, J2 ] = ReconstructFrame( I1, I2, stereoParams_Versuch3_Cut, 630, 850 );
+%[ Points3D, PointCloud, J1, J2 ] = ReconstructFrame( I1, I2, stereoParams_Versuch3_Cut, 630, 850 );
+% Right 2 Left Camera Callibration
+[ Points3D, PointCloud, J1, J2 ] = ReconstructFrame( I2, I1, stereoParams_R2L, 630, 850 );
 
-showPointCloud(PointCloud);
+%showPointCloud(PointCloud);
 
 % z = Points3D(:, :, 3);
 % maxZ = 850;
