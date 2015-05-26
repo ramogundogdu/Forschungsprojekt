@@ -44,28 +44,12 @@ function [ Points3D, PointCloud, J1, J2 ] = ReconstructFrame( I1, I2, StereoParm
      
     % ----------- serialize and filter infinite/nan values ------------ %
     
-    Points3Dx = Points3D(:,:,1);
-    Points3Dy = Points3D(:,:,2);
-    Points3Dz = Points3D(:,:,3);
-    
-    Points3Dx = Points3Dx(:);
-    Points3Dy = Points3Dy(:);
-    Points3Dz = Points3Dz(:);
-    
-    Points3DSerialized = [Points3Dx, Points3Dy, Points3Dz];
-    
-    % reduce to finite values
-    NoneFiniteIndx = any( isnan( Points3DSerialized ) | isinf( Points3DSerialized ), 2 );
-    Points3DSerialized = Points3DSerialized( ~NoneFiniteIndx, : );
-    
-    % reduce to set z-range
-    OutOfRangeIndx =  (Points3DSerialized(:,3) > maxZ | Points3DSerialized(:,3) < minZ);
-    Points3DSerialized = Points3DSerialized( ~OutOfRangeIndx, : );
-    
+    Points3DSerialized = SerializePoints3DFiltered(Points3D, minZ, maxZ);
     
     % ----------- create exported PointCloud object ------------ %
  
     PointCloud = pointCloud(Points3DSerialized);
+    
     %PointCloud = pcdenoise(PointCloud, 'NumNeighbors', 25);
     PointCloud = pcdenoise(PointCloud, 'NumNeighbors', 200);
 

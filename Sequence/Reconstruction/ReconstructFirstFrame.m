@@ -15,6 +15,8 @@ RightVid = VideoReader('rechts_HD.mp4');
 I1 = readFrame(LeftVid);
 I2 = readFrame(RightVid);
 
+%  == TODO: load updated callibration params!!!
+
 % Left 2 Right Camera Callibration
 load(['Versuch3_V1/Callib_Versuch3_Cut_Complete.mat']);
 % Right 2 Left Camera Callibration
