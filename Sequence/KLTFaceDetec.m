@@ -59,8 +59,10 @@ oldInliers = oldPoints(isFound, :);
 [xform, oldInliers, visiblePoints] = estimateGeometricTransform(...
     oldInliers, visiblePoints, 'similarity', 'MaxDistance', 2);
 
-
 RoundPoints = round(points);
 RoundVisiblePoints = round(visiblePoints);
 RoundOldInliers = round(oldInliers);
 RoundOldpoints = round(oldPoints);
+
+% find the transleted Vektors between old and new Pixels
+Vektors = oldInliers - visiblePoints;
