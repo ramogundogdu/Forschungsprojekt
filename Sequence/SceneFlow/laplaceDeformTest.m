@@ -1,6 +1,6 @@
-%Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
+Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
 %Ply_file = 'SceneFlowTestData/LaplaceTestData/cube.ply';
-Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
+%Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
 
 
 % convert ply to processable tri-mesh data
@@ -11,63 +11,67 @@ Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
 % axis equal;
 
 
-% adjazenz matrix berechnen
+% compute Laplace matrix
 
 numVerts = size(Mesh_Vertex_xyz, 2);
 LM = zeros(numVerts, numVerts);
 
-% ------ check computation time
+    % for each vertex  build adjacency row
+    for vI=1:numVerts
 
-% === compute upper half only and complete the matrix with transposed
+        % get all neighbours (indizies) of vI, excluding vI itself 
+        % - adjacency matrix
+        vINeighbours = Mesh_ConnectivityList(:, any(Mesh_ConnectivityList == vI));
+        vINeighbours = unique(vINeighbours,'sorted')';
+        vINeighbours = vINeighbours(:,~(vINeighbours == vI));
 
-tic();
-% for each vertex  build adjacency row
-% for vI=1:numVerts
-%     
-%     % get all neighbours (indizies) of vI, excluding vI itself 
-%     % - adjacency matrix
-%     vINeighbours = Mesh_ConnectivityList(:, any(Mesh_ConnectivityList == vI));
-%     vINeighbours = unique(vINeighbours,'sorted')';
-%     vINeighbours = vINeighbours(:,~(vINeighbours == vI));
-%     
-%     vINumNeighbours = size(vINeighbours, 2);
-%     
-%     % set neighbour cols to 1
-%     % only process upper half of symetrical matrix
-%     LM(vI, vINeighbours(vINeighbours > vI) ) = 1;
-%     
-%     % set adjM(vI, vI) to number of neighbours
-%     LM(vI,vI) = vINumNeighbours;
-%     
-% end
-% 
-% % extract diagonal (num of neighbours), add lower half, restore diagonal
-% LMdiag = diag(LM);
-% LM = LM + LM';
-% LM(eye(numVerts)==1) = LMdiag;
+        vINumNeighbours = size(vINeighbours, 2);
 
+        % set neighbour cols to 1
+        % only process upper half of symetrical matrix
+        LM(vI, vINeighbours) = -1;
 
-% === compute full matrix (seems faster!)
+        % set adjM(vI, vI) to number of neighbours
+        LM(vI,vI) = vINumNeighbours;
 
-% for each vertex  build adjacency row
-for vI=1:numVerts
+    end
     
-    % get all neighbours (indizies) of vI, excluding vI itself 
-    % - adjacency matrix
-    vINeighbours = Mesh_ConnectivityList(:, any(Mesh_ConnectivityList == vI));
-    vINeighbours = unique(vINeighbours,'sorted')';
-    vINeighbours = vINeighbours(:,~(vINeighbours == vI));
+% compute diffrential coordinates
+
+dX = LM * Mesh_Vertex_xyz(1,:)';
+dY = LM * Mesh_Vertex_xyz(2,:)';
+dZ = LM * Mesh_Vertex_xyz(3,:)';
+
+% RECONSTRUCTION of absolute coordinates
+
+    R = chol(LM);
+    M = R*R';
     
-    vINumNeighbours = size(vINeighbours, 2);
+    % add constraints
+
+    % testing purposes - chose v1 as fixed / constraint
+    % later we can use Mesh_Vertex_xyz'
+    vConst = Mesh_Vertex_xyz(:,1)';
     
-    % set neighbour cols to 1
-    % only process upper half of symetrical matrix
-    LM(vI, vINeighbours) = 1;
+    % add constraints
+    constRow = zeros(1,numVerts);
+    constRow(1,1) = 1;
+    M = [M; constRow];
     
-    % set adjM(vI, vI) to number of neighbours
-    LM(vI,vI) = vINumNeighbours;
+    % add known absolute coords to delta coords
+    dX = [dX; vConst(1,1)];
+    dY = [dY; vConst(1,2)];
+    dZ = [dZ; vConst(1,3)];
     
-end
+    % resolve normal equations
+    
+%     xAbs = M * dX;
+%     yAbs = M * dY;
+%     zAbs = M * dZ;
+    
+    
+    
+    
 
 
-toc();
+
