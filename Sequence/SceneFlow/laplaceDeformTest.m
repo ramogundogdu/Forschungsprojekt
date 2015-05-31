@@ -7,8 +7,8 @@ Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
 [ Mesh_ConnectivityList, Mesh_Vertex_xyz ] = ply_read ( Ply_file, 'tri' );
 
 % trisurf testmesh
-% trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz(1,:), Mesh_Vertex_xyz(2,:), Mesh_Vertex_xyz(3,:) );
-% axis equal;
+trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz(1,:), Mesh_Vertex_xyz(2,:), Mesh_Vertex_xyz(3,:) );
+axis equal;
 
 
 % compute Laplace matrix
@@ -16,25 +16,25 @@ Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
 numVerts = size(Mesh_Vertex_xyz, 2);
 LM = zeros(numVerts, numVerts);
 
-    % for each vertex  build adjacency row
-    for vI=1:numVerts
+% for each vertex  build adjacency row
+for vI=1:numVerts
 
-        % get all neighbours (indizies) of vI, excluding vI itself 
-        % - adjacency matrix
-        vINeighbours = Mesh_ConnectivityList(:, any(Mesh_ConnectivityList == vI));
-        vINeighbours = unique(vINeighbours,'sorted')';
-        vINeighbours = vINeighbours(:,~(vINeighbours == vI));
+    % get all neighbours (indizies) of vI, excluding vI itself 
+    % - adjacency matrix
+    vINeighbours = Mesh_ConnectivityList(:, any(Mesh_ConnectivityList == vI));
+    vINeighbours = unique(vINeighbours,'sorted')';
+    vINeighbours = vINeighbours(:,~(vINeighbours == vI));
 
-        vINumNeighbours = size(vINeighbours, 2);
+    vINumNeighbours = size(vINeighbours, 2);
 
-        % set neighbour cols to 1
-        % only process upper half of symetrical matrix
-        LM(vI, vINeighbours) = -1;
+    % set neighbour cols to 1
+    % only process upper half of symetrical matrix
+    LM(vI, vINeighbours) = -1;
 
-        % set adjM(vI, vI) to number of neighbours
-        LM(vI,vI) = vINumNeighbours;
+    % set adjM(vI, vI) to number of neighbours
+    LM(vI,vI) = vINumNeighbours;
 
-    end
+end
     
 % compute diffrential coordinates
 
@@ -44,32 +44,39 @@ dZ = LM * Mesh_Vertex_xyz(3,:)';
 
 % RECONSTRUCTION of absolute coordinates
 
-    R = chol(LM, 'lower');
-    M = R*R';
-    
-    % add constraints
+R = chol(LM, 'lower');
+M = R*R';
 
-    % testing purposes - chose v1 as fixed / constraint
-    % later we can use Mesh_Vertex_xyz'
-    vConst = Mesh_Vertex_xyz(:,1)';
-    
-    % add constraints
-    constRow = zeros(1,numVerts);
-    constRow(1,1) = 1;
-    M = [M; constRow];
-    
-    % add known absolute coords to delta coords
-    dX = [dX; vConst(1,1)];
-    dY = [dY; vConst(1,2)];
-    dZ = [dZ; vConst(1,3)];
-    
-    % resolve normal equations
-    
-%     xAbs = M * dX;
-%     yAbs = M * dY;
-%     zAbs = M * dZ;
-    
-    
+% add constraints
+
+% testing purposes - chose v1 as fixed / constraint
+% later we can use Mesh_Vertex_xyz'
+vConst = Mesh_Vertex_xyz(:,1)';
+
+% add constraints
+constRow = zeros(1,numVerts);
+constRow(1,1) = 1;
+M = [M; constRow];
+
+% add known absolute coords to delta coords
+dX = [dX; vConst(1,1)];
+dY = [dY; vConst(1,2)];
+dZ = [dZ; vConst(1,3)];
+
+% resolve  LGS
+
+recX = M\dX;
+recY = M\dY;
+recZ = M\dZ;
+
+% new Vertex position format
+
+Mesh_Vertex_xyz_recons = [ recX'; recY'; recZ'];
+
+figure;
+trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz_recons(1,:), Mesh_Vertex_xyz_recons(2,:), Mesh_Vertex_xyz_recons(3,:) );
+axis equal;
+
     
     
 

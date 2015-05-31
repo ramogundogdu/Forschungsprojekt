@@ -1,4 +1,4 @@
-function x = rueckw(R,b,n)
+function x = rueckw(R,y,n)
 %Die Funktion rueckw.m löst das LGS L'x=y, L'=R rechte obere Dreieckmatrix,
 %durch Rückwärtseinsetzen
 
