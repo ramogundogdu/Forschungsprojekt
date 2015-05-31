@@ -15,8 +15,10 @@ for groundTruthOFlowRow = groundTruthMap(1:1:end,1);
             for oFlowMapColumn = oFlowMap(1:1:end,:);      
                 
 %     groundTruthOFlowStructBetrag = abs(groundTruthMap) - abs(oFlowMap);
-
-    groundTruthOFlowStruct = groundTruthMap - oFlowMap;
+    
+    angle = (groundTruthMap/oFlowMap)
+    
+    groundTruthOFlowStruct = cos(angle);
     
 %     groundTruthOFlowANgle
     
