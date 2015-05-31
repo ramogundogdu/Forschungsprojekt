@@ -44,7 +44,7 @@ dZ = LM * Mesh_Vertex_xyz(3,:)';
 
 % RECONSTRUCTION of absolute coordinates
 
-    R = chol(LM);
+    R = chol(LM, 'lower');
     M = R*R';
     
     % add constraints
