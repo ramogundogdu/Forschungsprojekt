@@ -11,8 +11,12 @@ trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz(1,:), Mesh_Vertex_xyz(2,:), Me
 axis equal;
 
 % get fixed points for next frame
+% Mesh_Vertex_xyz_T1 = [];
+% Mesh_Vertex_xyz_T1 = Mesh_Vertex_xyz(:,1); % 1 fixed point test
+
 Mesh_Vertex_xyz_T1 = [];
-Mesh_Vertex_xyz_T1 = Mesh_Vertex_xyz(:,1); % 1 fixed point test
+Mesh_Vertex_xyz_T1 = Mesh_Vertex_xyz(:,1:2); % 2 fixed points
+Mesh_Vertex_xyz_T1(:,2) = Mesh_Vertex_xyz_T1(:,2) + [10;10;10];
 
 % call deform
 Mesh_Vertex_deformed_xyz = laplaceDeform(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_xyz_T1);

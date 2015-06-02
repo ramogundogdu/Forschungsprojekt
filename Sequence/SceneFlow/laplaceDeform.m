@@ -1,6 +1,11 @@
 function [ VertsOut_xyz ] = laplaceDeform( ConnectivityList, VertsT0_xyz, VertsFixedT1_xyz )
-%LAPLACEDEFORM Summary of this function goes here
-%   Detailed explanation goes here
+% Coordinate deformation / smoothing through laplacian operation
+
+% ConnectivityList: -
+% VertsT0_xyz: 3xN Matrix with Vertex positions at t0
+% VertsFixedT1_xyz: 3xN Matrix with fixed/know Vertex positions at t1. Same
+% dimensions as VertsT0_xyz; if Position of certain Verticies is unknown,
+% inf/nan/0 should be placed at this row index
 
 
 
@@ -51,9 +56,9 @@ for vI=1:numVertsFixed
     constRow(1, vI) = 1;
     M = [M; constRow];
     
-    dX = [dX; vConst(1,vI)];
-    dY = [dY; vConst(2,vI)];
-    dZ = [dZ; vConst(3,3vI)];
+    dX = [dX; currVFixed(1,1)];
+    dY = [dY; currVFixed(2,1)];
+    dZ = [dZ; currVFixed(3,1)];
     
 end
 
@@ -67,6 +72,7 @@ recZ = M\dZ;
 
 VertsOut_xyz = [ recX'; recY'; recZ'];
 
+% TODO - restore positions of known fixed points!!!
 
 end
 
