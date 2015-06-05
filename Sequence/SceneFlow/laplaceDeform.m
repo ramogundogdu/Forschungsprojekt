@@ -34,15 +34,17 @@ for vI=1:numVerts
 end
     
 % compute diffrential coordinates
-
+% scaled differ
 dX = LM * VertsT0_xyz(1,:)';
 dY = LM * VertsT0_xyz(2,:)';
 dZ = LM * VertsT0_xyz(3,:)';
 
 % RECONSTRUCTION of absolute coordinates
 
-R = chol(LM, 'lower');
-M = R*R';
+% R = chol(LM, 'lower');
+% M = R*R';
+
+M = LM;
 
 % add constraints
 
@@ -53,7 +55,7 @@ for vI=1:numVertsFixed
     % TODO continue wenn kein tiefenwert vorhanden (spalte leer???)
     currVFixed = VertsFixedT1_xyz(:,vI);
     constRow = zeros(1,numVerts);
-    constRow(1, vI) = 1;
+    constRow(1, vI) = 100;
     M = [M; constRow];
     
     dX = [dX; currVFixed(1,1)];
