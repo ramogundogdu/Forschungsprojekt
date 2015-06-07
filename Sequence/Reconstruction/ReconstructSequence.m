@@ -68,8 +68,8 @@ for fI=1:numFrames
     % on first frame, create rectified video structs
     if(fI == 1) 
         
-        [J1Height, J1Width] = size(J1);
-        [J2Height, J2Width] = size(J2);
+        [J1Height, J1Width, c] = size(J1);
+        [J2Height, J2Width, c] = size(J2);
         
         if(J1Height ~= J2Height || J1Width ~= J2Width)
             error('rectified video dimensions do not match!');
@@ -89,7 +89,7 @@ end
 
 % ========== save data
 
-save 'DepthMapCell_5sec_v1' DepthMapCell;
-save 'links_HD_5sec_rect_v1' RectVidLeftStruct;
-save 'rechts_HD_5sec_rect_v1' RectVidRightStruct;
+save 'DepthMapCell_5sec_v1' DepthMapCell -v7.3;
+save 'links_HD_5sec_rect_v1' RectVidLeftStruct -v7.3;
+save 'rechts_HD_5sec_rect_v1' RectVidRightStruct -v7.3;
 
