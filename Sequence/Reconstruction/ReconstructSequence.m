@@ -33,8 +33,6 @@ if(size(OrigVidLeftStruct, 2) ~= size(OrigVidRightStruct, 2))
     error('video frame count must match!');
 end
 
-
-
 % ========== get callibration data
 
 load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
@@ -46,17 +44,23 @@ minZ = 630;
 maxZ = 850;
 
 % reconstructed depth cell
-% UVFlowCell = cell(1, size(OrigVidStruct, 2)-1);
-% UVFlowCell(1, ind) = {uvMap};
+% 2xN cell array - 1st Row: Depth map at frame N, 2nd Row: PointCloud at
+% frame N
+DepthMapCell = cell(2, numFrames);
 
-% ========== reconstruct
+% ========== reconstruction and rectification
 
-for fI=1:numFrames
+% start at 1 is mandatory!
+for fI=1:2
      
     frameLeft = OrigVidLeftStruct(fI).cdata;
     frameRight = OrigVidRightStruct(fI).cdata;
     
     [ PointMap, PointCloud, J1, J2 ] = ReconstructFrame( frameLeft, frameRight, Callib_Versuch3_Cut_Complete_L2R, minZ, maxZ );
+    
+    % save depth infos in DepthMapCell
+    DepthMapCell(1, fI) = {PointMap};
+    DepthMapCell(2, fI) = {PointCloud};
     
     % on first frame, create rectified video structs
     if(fI == 1) 
@@ -68,18 +72,21 @@ for fI=1:numFrames
             error('rectified video dimensions do not match!');
         end
         
-        J1Struct = struct('cdata',zeros(J1Height,J1Width,3,'double'),'colormap',[]);
-        J2Struct = struct('cdata',zeros(J2Height,J2Width,3,'double'),'colormap',[]);
+        RectVidLeftStruct = struct('cdata',zeros(J1Height,J1Width,3,'double'),'colormap',[]);
+        RectVidRightStruct = struct('cdata',zeros(J2Height,J2Width,3,'double'),'colormap',[]);
         
     end
     
     % push rectified frames to structs
-    J1Struct(fI).cdata = J1;
-    J2Struct(fI).cdata = J2;
+    RectVidLeftStruct(fI).cdata = im2double(J1);
+    RectVidRightStruct(fI).cdata = im2double(J2);
     
 end
 
 
 % ========== save data
 
-% write rectified 
+save 'DepthMapCell_5sec_v1' DepthMapCell;
+save 'links_HD_5sec_rect_v1' RectVidLeftStruct;
+save 'rechts_HD_5sec_rect_v1' RectVidRightStruct;
+
