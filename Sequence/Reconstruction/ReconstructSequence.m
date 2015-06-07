@@ -51,7 +51,7 @@ DepthMapCell = cell(2, numFrames);
 % ========== reconstruction and rectification
 
 % start at 1 is mandatory!
-for fI=1:2
+for fI=1:numFrames
      
     frameLeft = OrigVidLeftStruct(fI).cdata;
     frameRight = OrigVidRightStruct(fI).cdata;
