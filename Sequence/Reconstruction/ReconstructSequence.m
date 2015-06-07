@@ -53,6 +53,9 @@ DepthMapCell = cell(2, numFrames);
 % start at 1 is mandatory!
 for fI=1:numFrames
      
+    str = sprintf('----  Reconstructing frame %d of %d  ----', fI, numFrames);
+    disp(str);
+    
     frameLeft = OrigVidLeftStruct(fI).cdata;
     frameRight = OrigVidRightStruct(fI).cdata;
     
