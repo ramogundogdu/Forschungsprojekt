@@ -1,5 +1,5 @@
-% Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
-Ply_file = 'SceneFlowTestData/LaplaceTestData/cube.ply';
+ Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
+%Ply_file = 'SceneFlowTestData/LaplaceTestData/cube.ply';
 % Ply_file = 'SceneFlowTestData/LaplaceTestData/dart.ply';
 %Ply_file = 'SceneFlowTestData/LaplaceTestData/sandal.ply';
 %Ply_file = 'SceneFlowTestData/LaplaceTestData/sphere.ply';
