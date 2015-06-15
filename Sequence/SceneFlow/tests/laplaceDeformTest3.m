@@ -1,8 +1,8 @@
- Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
-%Ply_file = 'SceneFlowTestData/LaplaceTestData/cube.ply';
-% Ply_file = 'SceneFlowTestData/LaplaceTestData/dart.ply';
-%Ply_file = 'SceneFlowTestData/LaplaceTestData/sandal.ply';
-%Ply_file = 'SceneFlowTestData/LaplaceTestData/sphere.ply';
+%Ply_file = 'SceneFlowTestData/LaplaceTestData/icosahedron.ply';
+% Ply_file = 'SceneFlowTestData/LaplaceTestData/cube.ply';
+%Ply_file = 'SceneFlowTestData/LaplaceTestData/dart.ply';
+Ply_file = 'SceneFlowTestData/LaplaceTestData/sandal.ply';
+% Ply_file = 'SceneFlowTestData/LaplaceTestData/sphere.ply';
 %Ply_file = 'SceneFlowTestData/LaplaceTestData/teapot.ply';
 %Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
 
@@ -38,8 +38,9 @@ Mesh_Vertex_xyz_T1 = [];
 Mesh_Vertex_xyz_T1 = Mesh_Vertex_xyz(:,1); % 1 fixed point test
 
 % Mesh_Vertex_xyz_T1 = [];
-% Mesh_Vertex_xyz_T1 = Mesh_Vertex_xyz(:,1:2); % 2 fixed points
-% Mesh_Vertex_xyz_T1(:,2) = Mesh_Vertex_xyz_T1(:,2) + [10;10;0]
+% Mesh_Vertex_xyz_T1 = Mesh_Vertex_xyz(:,1:3); % 3 fixed points
+% Mesh_Vertex_xyz_T1(:,2) = Mesh_Vertex_xyz_T1(:,2) + [10;10;0];
+% Mesh_Vertex_xyz_T1(:,3) = Mesh_Vertex_xyz_T1(:,3) + [-15;-20;5];
 
 % call deform
 Mesh_Vertex_deformed_xyz = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_xyz_T1);

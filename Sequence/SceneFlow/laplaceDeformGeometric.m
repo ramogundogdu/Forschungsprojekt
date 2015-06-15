@@ -96,44 +96,51 @@ function [ VertsOut_xyz ] = laplaceDeformGeometric( ConnectivityList, VertsT0_xy
        
     end
     
-% ================= differential coords    
-    dX = zeros(numVerts,1);
-    dY = zeros(numVerts,1);
-    dZ = zeros(numVerts,1);
+% ================= differential coords 
+
+% NEW: get differential coords by martix-vector multiplication!
+
+    dX = WM * VertsT0_xyz(1,:)';
+    dY = WM * VertsT0_xyz(2,:)';
+    dZ = WM * VertsT0_xyz(3,:)';
     
-    % for every vertex vI
-    for i=1:numVerts
-        
-        % vertex coords of vI
-        vI = VertsT0_xyz(:, i);
-        
-        %neighbourInd = AM(1,:) == -1;
-        
-        dXSum = 0;
-        dYSum = 0;
-        dZSum = 0;
-        dWSum = 0;
-        
-        % for each neighbour
-        for j=1:numVerts
-            if(AM(i,j) == -1) 
-                
-                vJ = VertsT0_xyz(:, j);
-                weightJ = WM(i,j);
-                
-                dXSum = dXSum + weightJ * vJ(1,1);
-                dYSum = dYSum + weightJ * vJ(2,1);
-                dZSum = dZSum + weightJ * vJ(3,1);
-                dWSum = dWSum + weightJ;
-                
-            end
-        end
-        
-        dX(i,1) = vI(1,1) - dXSum/dWSum;
-        dY(i,1) = vI(2,1) - dYSum/dWSum;
-        dZ(i,1) = vI(3,1) - dZSum/dWSum;
-        
-    end
+%     dX = zeros(numVerts,1);
+%     dY = zeros(numVerts,1);
+%     dZ = zeros(numVerts,1);
+%     
+%     % for every vertex vI
+%     for i=1:numVerts
+%         
+%         % vertex coords of vI
+%         vI = VertsT0_xyz(:, i);
+%         
+%         %neighbourInd = AM(1,:) == -1;
+%         
+%         dXSum = 0;
+%         dYSum = 0;
+%         dZSum = 0;
+%         dWSum = 0;
+%         
+%         % for each neighbour
+%         for j=1:numVerts
+%             if(AM(i,j) == -1) 
+%                 
+%                 vJ = VertsT0_xyz(:, j);
+%                 weightJ = WM(i,j);
+%                 
+%                 dXSum = dXSum + weightJ * vJ(1,1);
+%                 dYSum = dYSum + weightJ * vJ(2,1);
+%                 dZSum = dZSum + weightJ * vJ(3,1);
+%                 dWSum = dWSum + weightJ;
+%                 
+%             end
+%         end
+%         
+%         dX(i,1) = vI(1,1) - dXSum/dWSum;
+%         dY(i,1) = vI(2,1) - dYSum/dWSum;
+%         dZ(i,1) = vI(3,1) - dZSum/dWSum;
+%         
+%     end
     
     
 % ================= RECONSTRUCTION of absolute coordinates
