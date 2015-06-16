@@ -150,11 +150,13 @@ M = WM;
 % add constraints
 
 for vI=1:numVertsFixed
-    
-    % indizes beachten bei der erstellung der fixed point matrix!!!!! TODO
-    
-    % TODO continue wenn kein tiefenwert vorhanden (spalte leer???)
+       
     currVFixed = VertsFixedT1_xyz(:,vI);
+    
+    % continue if no constraint is given
+    isInvalid = any( isnan( currVFixed ) );
+    if(isInvalid) continue;
+    
     constRow = zeros(1,numVerts);
     constRow(1, vI) = 1;
     M = [M; constRow];

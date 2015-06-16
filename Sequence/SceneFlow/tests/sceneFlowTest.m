@@ -7,7 +7,7 @@
 
 load(['SceneFlowTestData/SceneFlowTestData.mat']);
 
-Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply'
+Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
 
 % load callibration data
 load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
@@ -50,16 +50,19 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 
 % put this in a loop for each frame - with matching vertex matrix and flow
 % map
-Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
+% DepthMapCell_2frames{1,2} --> frame 66
+% UVFlowCell_2frames{1,1} --> frame 65 to 66
+Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
+
+Mesh_Vertex_deformed_xyz = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_Tnext_xyz);
 
 
 % ===========================
 
 % OLD
+trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz(1,:), Mesh_Vertex_xyz(2,:), Mesh_Vertex_xyz(3,:) );
+axis equal;
 
-% convert ply to processable tri-mesh data
-% [ Mesh_ConnectivityList, Mesh_Vertex_xyz ] = ply_read ( Ply_file, 'tri' );
-% 
-% % trisurf testmesh
-% trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz(1,:), Mesh_Vertex_xyz(2,:), Mesh_Vertex_xyz(3,:) );
-% axis equal;
+figure;
+trisurf ( Mesh_ConnectivityList', Mesh_Vertex_deformed_xyz(1,:), Mesh_Vertex_deformed_xyz(2,:), Mesh_Vertex_deformed_xyz(3,:) );
+axis equal;
