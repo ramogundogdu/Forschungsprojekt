@@ -19,6 +19,7 @@ function [ Mesh_Vertex_Tnext_xyz ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr
 % UVFlowMap:                MxNx2 matrix with optical flow vectors from
 %                           Tcurr to Tnext
 
+disp('--- starting: nextFrameVertexPositions');
 
 % intrinsic parameters of left camera
 K = stereoParams.CameraParameters1.IntrinsicMatrix';
@@ -31,6 +32,9 @@ Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
 
 % for each vertex in Mesh_Vertex_Tcurr_xyz
 for vI=1:numVerts
+    
+    str = sprintf('----  Vertex %d of %d  ----', vI, numVerts);
+    disp(str);
     
     % === get projected 2D-coords of vertex
     % get vertex
@@ -62,6 +66,7 @@ for vI=1:numVerts
     
 end
 
+disp('--- done: nextFrameVertexPositions');
 %Mesh_Vertex_Tnext_xyz = NaN(size(Mesh_Vertex_Tcurr_xyz));
 
 end

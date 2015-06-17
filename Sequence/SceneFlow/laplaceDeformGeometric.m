@@ -7,11 +7,14 @@ function [ VertsOut_xyz ] = laplaceDeformGeometric( ConnectivityList, VertsT0_xy
 % dimensions as VertsT0_xyz; if Position of certain Verticies is unknown,
 % inf/nan/0 should be placed at this row index
 
+disp('-------- starting: laplaceDeformGeometric');
 
     numVerts = size(VertsT0_xyz, 2);
     
     numVertsFixed = size(VertsFixedT1_xyz, 2);
     AM = zeros(numVerts, numVerts);
+    
+disp('-------- building laplace');
 
     % === adjacency matrix
     for vI=1:numVerts
@@ -35,6 +38,8 @@ function [ VertsOut_xyz ] = laplaceDeformGeometric( ConnectivityList, VertsT0_xy
     
     % ================= weight matrix
     WM = AM;
+
+    disp('-------- building weight matrix');
     
     % for every vertex vI
     for i=1:numVerts
@@ -99,6 +104,7 @@ function [ VertsOut_xyz ] = laplaceDeformGeometric( ConnectivityList, VertsT0_xy
 % ================= differential coords 
 
 % NEW: get differential coords by martix-vector multiplication!
+    disp('-------- computing differential coordinats');
 
     dX = WM * VertsT0_xyz(1,:)';
     dY = WM * VertsT0_xyz(2,:)';
@@ -149,6 +155,7 @@ M = WM;
 
 % add constraints
 
+disp('-------- adding constraints');
 for vI=1:numVertsFixed
        
     currVFixed = VertsFixedT1_xyz(:,vI);
@@ -169,8 +176,11 @@ end
 
 % resolve  LGS
 
+disp('-------- start solving 1st LGS');
 recX = M\dX;
+disp('-------- start solving 2nd LGS');
 recY = M\dY;
+disp('-------- start solving 3rd LGS');
 recZ = M\dZ;
 
 % new Vertex position format
@@ -178,7 +188,7 @@ recZ = M\dZ;
 VertsOut_xyz = [ recX'; recY'; recZ'];
 
 % TODO - restore positions of known fixed points!!!
-    
+disp('-------- done: laplaceDeformGeometric');    
 
 end
 
