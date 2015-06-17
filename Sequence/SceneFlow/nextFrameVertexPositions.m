@@ -31,6 +31,7 @@ M = [K [0;0;0]]
 % 3x2 matrix [xMin,xMax;yMin,yMax;zMin,zMax]
 bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
 
+% TODO add variable padding to the bounding box
 
 numVerts = size(Mesh_Vertex_Tcurr_xyz, 2);
 Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
@@ -72,7 +73,8 @@ for vI=2:numVerts
         );
     end
     
-    if(isInvalid || isOutOfBounds) 
+    % if(isInvalid || isOutOfBounds) 
+    if(isInvalid) 
         continue;
     else
         Mesh_Vertex_Tnext_xyz(:,vI) = nextV;

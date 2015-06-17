@@ -41,17 +41,30 @@ disp('-------- building laplace');
 
     disp('-------- building weight matrix');
     
-    % for every vertex vI
+    % for each vertex vI
     for i=1:numVerts
+        
+        % ????
+        weightSum = 0;
         
         % vertex coords of vI
         vI = VertsT0_xyz(:, i);
         
+        
+        % OLD
+        %
         % build weight for every neighbour vJ
-        for j=1:numVerts
+        % for j=1:numVerts
+        
+        % PERFORMANCE improve, loop just over neede indizies
+        adjIndx = find(ismember(AM(i,:),[-1]));
+        
+        for j = adjIndx
             
+            % OLD
+            %
             % if vJ is neighbour of vI
-            if( AM(i,j) == -1 )
+            %if( AM(i,j) == -1 )
                 
                 % vertex coords of vI
                 vJ = VertsT0_xyz(:, j);
@@ -93,12 +106,18 @@ disp('-------- building laplace');
                     
                 end
                 
-                WM(i,j) = -weight; % TODO positive???
+                WM(i,j) = -weight; %  negative weight
                 
-            end
+                % ???
+                weightSum = weightSum + weight;
+                
+            %end
             
         end
-       
+        
+        % ???
+        WM(i,i) = weightSum;
+        
     end
     
 % ================= differential coords 
