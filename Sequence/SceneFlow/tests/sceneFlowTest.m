@@ -57,9 +57,9 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 tic
 disp('Ressources loaded - starting');
 
-Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
+%Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
 
-% Mesh_Vertex_deformed_xyz = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_Tnext_xyz);
+ Mesh_Vertex_deformed_xyz = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_Tnext_xyz);
 
 disp('done!');
 toc

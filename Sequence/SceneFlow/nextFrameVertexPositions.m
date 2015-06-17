@@ -36,7 +36,7 @@ numVerts = size(Mesh_Vertex_Tcurr_xyz, 2);
 Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
 
 % for each vertex in Mesh_Vertex_Tcurr_xyz
-for vI=1:numVerts
+for vI=2:numVerts
     
     str = sprintf('----  Vertex %d of %d  ----', vI, numVerts);
     disp(str);
@@ -68,7 +68,7 @@ for vI=1:numVerts
         isOutOfBounds = ( ...
             nextV(1,1) < bb(1,1) || nextV(1,1) > bb(1,2) || ...
             nextV(2,1) < bb(2,1) || nextV(2,1) > bb(2,2) || ...
-            nextV(3,1) < bb(3,1) || nextV(3,1) > bb(3,3) ...
+            nextV(3,1) < bb(3,1) || nextV(3,1) > bb(3,2) ...
         );
     end
     

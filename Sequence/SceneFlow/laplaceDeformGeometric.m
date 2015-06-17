@@ -156,6 +156,21 @@ M = WM;
 % add constraints
 
 disp('-------- adding constraints');
+
+% FOR PERFORMANCE REASONS:
+% get number of constraints (non nan cols), assuming nan in all rows!
+numConstraints = size( VertsFixedT1_xyz(1, ~isnan(VertsFixedT1_xyz(1,:))),2 );
+
+% initialize rows, that have to be appended to diff-coords and M
+MConst = zeros(numConstraints, numVerts);
+dXConst = zeros(numConstraints, 1);
+dYConst = zeros(numConstraints, 1);
+dZConst = zeros(numConstraints, 1);
+
+% separate loop counter for constraint indizies
+constItCount = 1;
+
+% compute them and append them after the loop!
 for vI=1:numVertsFixed
        
     currVFixed = VertsFixedT1_xyz(:,vI);
@@ -166,15 +181,34 @@ for vI=1:numVertsFixed
         continue;
     end
     
-    constRow = zeros(1,numVerts);
-    constRow(1, vI) = 1;
-    M = [M; constRow];
+    % insert values indexed - much faster!
+    MConst(constItCount, vI) = 1;
     
-    dX = [dX; currVFixed(1,1)];
-    dY = [dY; currVFixed(2,1)];
-    dZ = [dZ; currVFixed(3,1)];
+    dXConst(constItCount,1) = currVFixed(1,1);
+    dYConst(constItCount,1) = currVFixed(2,1);
+    dZConst(constItCount,1) = currVFixed(3,1);
+    
+    % increase counter for inserted constraints
+    constItCount = constItCount + 1;
+    
+    % OLD
+    %
+    % constRow = zeros(1,numVerts);
+    % constRow(1, vI) = 1;
+    % M = [M; constRow];
+    % 
+    % dX = [dX; currVFixed(1,1)];
+    % dY = [dY; currVFixed(2,1)];
+    % dZ = [dZ; currVFixed(3,1)];
     
 end
+
+% append constraints in one step!
+
+M = [M; MConst];
+dX = [dX; dXConst];
+dY = [dY; dYConst];
+dZ = [dZ; dZConst];
 
 % resolve  LGS
 
