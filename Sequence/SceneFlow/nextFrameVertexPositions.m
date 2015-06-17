@@ -27,6 +27,11 @@ K = stereoParams.CameraParameters1.IntrinsicMatrix';
 M = [K [0;0;0]]
 
 
+% get bounding box for all dimensions
+% 3x2 matrix [xMin,xMax;yMin,yMax;zMin,zMax]
+bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
+
+
 numVerts = size(Mesh_Vertex_Tcurr_xyz, 2);
 Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
 
@@ -58,7 +63,16 @@ for vI=1:numVerts
     % check for invalid entries / no depth information
     isInvalid = any( isnan( nextV ) | isinf( nextV ) );
     
-    if(isInvalid) 
+    % if it is valid, check for bounding box
+    if(~isInvalid)
+        isOutOfBounds = ( ...
+            nextV(1,1) < bb(1,1) || nextV(1,1) > bb(1,2) || ...
+            nextV(2,1) < bb(2,1) || nextV(2,1) > bb(2,2) || ...
+            nextV(3,1) < bb(3,1) || nextV(3,1) > bb(3,3) ...
+        );
+    end
+    
+    if(isInvalid || isOutOfBounds) 
         continue;
     else
         Mesh_Vertex_Tnext_xyz(:,vI) = nextV;

@@ -162,7 +162,9 @@ for vI=1:numVertsFixed
     
     % continue if no constraint is given
     isInvalid = any( isnan( currVFixed ) );
-    if(isInvalid) continue;
+    if(isInvalid) 
+        continue;
+    end
     
     constRow = zeros(1,numVerts);
     constRow(1, vI) = 1;
