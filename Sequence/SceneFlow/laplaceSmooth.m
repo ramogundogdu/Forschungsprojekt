@@ -17,6 +17,7 @@ if( size(LTL,1) ~= size(LTL,2))
 end
 
 disp(' --- start: laplaceSmooth ---');
+
 numVerts = size(VertsBase,2);
 I = eye(numVerts);
 VerstT1 = zeros(3, numVerts);
@@ -38,7 +39,7 @@ disp(' --- z coords ---');
 F2z = VertsT0(3,:)' + SFV(3,:)' + alpha * LTL * VertsBase(3,:)';
 zOut = F1\F2z;
 
-
+% Output
 VerstT1 = [ xOut'; yOut'; zOut' ];
 
 disp(' --- done: laplaceSmooth ---');

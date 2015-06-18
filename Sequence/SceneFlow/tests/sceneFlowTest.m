@@ -17,7 +17,7 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 % ========= load base mesh for the test frames (65)
 
 % convert ply to processable tri-mesh data
-[ Mesh_ConnectivityList, Mesh_Vertex_xyz ] = ply_read ( Ply_file, 'tri' );
+[ BaseMesh_ConnectivityList, BaseMesh_Verts ] = ply_read ( Ply_file, 'tri' );
 
 % ===========================
 
@@ -55,21 +55,21 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 tic
 disp('Ressources loaded - starting');
 
-% Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
+VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
 
 
 % % return weight matrix as well
-[Mesh_Vertex_deformed_xyz, weightedLaplace] = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_Tnext_xyz);
+[Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
 
 
 % AT FIRST FRAME (Base mesh), save LT * L for smoothing
 LTL = weightedLaplace' * weightedLaplace;
 
 % smoothing
-sceneFlowVs = sceneFlowVectors( Mesh_Vertex_xyz, Mesh_Vertex_deformed_xyz );
+sceneFlowVecs = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext );
 
 % TODO separate base mesh
-Mesh_Vertex_final = laplaceSmooth( Mesh_Vertex_xyz, Mesh_Vertex_xyz, LTL, sceneFlowVs, 1 )
+VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVs, 1 )
 
 
 disp('done!');
@@ -79,9 +79,13 @@ toc
 % ===========================
 
 % OLD
-trisurf ( Mesh_ConnectivityList', Mesh_Vertex_xyz(1,:), Mesh_Vertex_xyz(2,:), Mesh_Vertex_xyz(3,:) );
+trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
 axis equal;
 
+% figure;
+% trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
+% axis equal;
+
 figure;
-trisurf ( Mesh_ConnectivityList', Mesh_Vertex_deformed_xyz(1,:), Mesh_Vertex_deformed_xyz(2,:), Mesh_Vertex_deformed_xyz(3,:) );
+trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
 axis equal;
