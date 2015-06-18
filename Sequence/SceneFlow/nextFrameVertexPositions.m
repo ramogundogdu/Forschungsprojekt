@@ -25,13 +25,15 @@ disp('--- starting: nextFrameVertexPositions');
 K = stereoParams.CameraParameters1.IntrinsicMatrix';
 % projection matrix
 M = [K [0;0;0]];
+% baseline displacement
+blDisp = round(stereoParams.TranslationOfCamera2(1,1)/2);
 
 
 % get bounding box for all dimensions
 % 3x2 matrix [xMin,xMax;yMin,yMax;zMin,zMax]
 bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
 % add padding to bb
-bPadding = 20;
+bPadding = 0;
 bb(:,1) =  bb(:,1) - bPadding;
 bb(:,2) =  bb(:,2) + bPadding;
 
@@ -42,7 +44,7 @@ numVerts = size(Mesh_Vertex_Tcurr_xyz, 2);
 Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
 
 % for each vertex in Mesh_Vertex_Tcurr_xyz
-for vI=2:numVerts
+for vI=1:numVerts
     
     str = sprintf('----  Vertex %d of %d  ----', vI, numVerts);
     disp(str);
@@ -55,13 +57,15 @@ for vI=2:numVerts
     currP = M*currV;
     currP = currP./currP(3,1);
     currP = round(currP(1:2,1)); % rounded values!
-    
+     
     % === get flow vector
     flowV = squeeze(UVFlowMap( currP(2,1) , currP(1,1), :));%y=row, x=col
     flowV = round(flowV); % TODO --- rounding?
     
     % === get next 2D coord
-    nextP = currP + flowV;
+    % adjust baseline displacement in x
+    currP(1,1) = currP(1,1) - blDisp;
+    nextP = currP + flowV; % TEST - no flow
     
     % === get new vertex pos from depth map    
     nextV = squeeze(DepthMap_Tnext( nextP(2,1), nextP(1,1), : ));

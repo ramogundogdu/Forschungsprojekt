@@ -57,8 +57,7 @@ disp('Ressources loaded - starting');
 
 VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
 
-
-% % return weight matrix as well
+% return weight matrix as well
 [Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
 
 
@@ -69,7 +68,7 @@ LTL = weightedLaplace' * weightedLaplace;
 sceneFlowVecs = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext );
 
 % TODO separate base mesh
-VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVs, 1 )
+VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVs, 1 );
 
 
 disp('done!');
@@ -82,9 +81,9 @@ toc
 trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
 axis equal;
 
-% figure;
-% trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
-% axis equal;
+figure;
+trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
+axis equal;
 
 figure;
 trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
