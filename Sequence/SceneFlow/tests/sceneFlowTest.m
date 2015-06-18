@@ -65,21 +65,18 @@ disp('Ressources loaded - starting');
 % LTL = weightedLaplace' * weightedLaplace;
 % 
 % % smoothing
-% sceneFlowVecs = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext );
+%[sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
+% TODO plot vectors at indexes sceneFlowVecs_InterpIndx red, the others ...
+% green
+
 
 % TODO separate base mesh
-%VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
+% VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 
-% try to write ply file
-
-
-clear Data;
-  Data.vertex.x = [0;0;0;0;1;1;1;1];
-  Data.vertex.y = [0;0;1;1;0;0;1;1];
-  Data.vertex.z = [0;1;1;0;0;1;1;0];
-  Data.face.vertex_indices = {[0,1,2,3],[7,6,5,4], ...
-        [0,4,5,1],[1,5,6,2],[2,6,7,3],[3,7,4,0]};
-  plywrite(Data,'cube.ply','ascii');
+% write ply file
+ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
+plyName = sprintf('frame_%d.ply', 22);
+ply_write ( ply_data, plyName,'ascii', 'double' );
 
 
 disp('done!');
@@ -91,13 +88,15 @@ toc
 % ===========================
 
 % OLD
-trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
-axis equal;
+% trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
+% axis equal;
 
-figure;
-trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
-axis equal;
+% figure;
+% trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
+% axis equal;
 
-figure;
-trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
-axis equal;
+% 
+% figure;
+% trisurf ( BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
+% axis equal;
+% 
