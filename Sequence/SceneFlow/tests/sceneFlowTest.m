@@ -54,21 +54,21 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 
 tic
 disp('Ressources loaded - starting');
-
-VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
-
-% return weight matrix as well
-[Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
-
-
-% AT FIRST FRAME (Base mesh), save LT * L for smoothing
-LTL = weightedLaplace' * weightedLaplace;
-
-% smoothing
-sceneFlowVecs = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext );
+% 
+% VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
+% 
+% % return weight matrix as well
+% [Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
+% 
+% 
+% % AT FIRST FRAME (Base mesh), save LT * L for smoothing
+% LTL = weightedLaplace' * weightedLaplace;
+% 
+% % smoothing
+% sceneFlowVecs = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext );
 
 % TODO separate base mesh
-VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVs, 1 );
+VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 
 
 disp('done!');
