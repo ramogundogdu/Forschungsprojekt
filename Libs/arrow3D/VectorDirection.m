@@ -14,18 +14,18 @@ colormap(bone);
 hold off
 
 
-% 
-% a = [2 3 5];
-% b = [1 1 0];
-% c = a+b;
-% 
-% starts = zeros(3,3);
-% ends = [a;b;c];
-% tri = delaunay(a,b);
-% c = peaks(15);
-% [U,V,W] = surfnorm(a,b,c);
-% figure
-% quiver3(starts(a, b, c, U, V, W))
-% hold on
-% trisurf(tri,a,b,c)
-% hold off
+
+a = [2 3 5];
+b = [1 1 0];
+
+[X,Y] = meshgrid(a, b);
+Z = Y.^2 - X.^2;
+
+
+c = peaks(15);
+[U,V,W] = surfnorm(Z);
+figure
+quiver3(Z, U, V, W)
+hold on
+trisurf(a,b,c)
+hold off
