@@ -68,11 +68,24 @@ disp('Ressources loaded - starting');
 % sceneFlowVecs = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext );
 
 % TODO separate base mesh
-VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
+%VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
+
+% try to write ply file
+
+
+clear Data;
+  Data.vertex.x = [0;0;0;0;1;1;1;1];
+  Data.vertex.y = [0;0;1;1;0;0;1;1];
+  Data.vertex.z = [0;1;1;0;0;1;1;0];
+  Data.face.vertex_indices = {[0,1,2,3],[7,6,5,4], ...
+        [0,4,5,1],[1,5,6,2],[2,6,7,3],[3,7,4,0]};
+  plywrite(Data,'cube.ply','ascii');
 
 
 disp('done!');
 toc
+
+
 
 % save 'sceneFlowTest_firstInterpolationRun' Mesh_Vertex_Tnext_xyz Mesh_Vertex_deformed_xyz -v7.3;
 % ===========================
