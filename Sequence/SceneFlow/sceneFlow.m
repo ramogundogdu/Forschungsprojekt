@@ -14,9 +14,15 @@ Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
 [ BaseMesh_ConnectivityList, BaseMesh_Verts ] = ply_read ( Ply_file, 'tri' );
 
 % number of frames, according to depth map count
-NUM_FRAMES = size(DepthMapCell, 2);
+NUM_FRAMES = size(DepthMapCell, 2)
+
+% check for matching frame counts
+if(size(UVFlowCell,2) ~= NUM_FRAMES-1)
+    error('frame counts of flow- and depth maps do not match!');
+end
+
 % scale factor for smoothing
-smoothingScale = 0.5;
+smoothingScale = 0.5
 
 % vertex containers
 Verts_Tcurr = BaseMesh_Verts;
