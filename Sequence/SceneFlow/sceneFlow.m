@@ -31,6 +31,9 @@ tic
 
 for FRAME_IND = 1:NUM_FRAMES-1
     
+    stat = sprintf('========  Frame %d of %d  ========', FRAME_IND, NUM_FRAMES);
+    disp(stat);
+    
     NEXT_DEPTHMAP = DepthMapCell{ 1, FRAME_IND + 1 };
     CURR_FLOWCELL = UVFlowCell{1, FRAME_IND };
     
@@ -42,21 +45,36 @@ for FRAME_IND = 1:NUM_FRAMES-1
     
     % at first frame (Base mesh), build LTL for smoothing
     if(FRAME_IND == 1)
+       disp('======== build LTL ========');
        LTL = weightedLaplace' * weightedLaplace;
     end
     
     % build scene flow vectors
     [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( Verts_Tcurr, VertsDeformed_Tnext, VertsConst_Tnext ); 
+    
+    % smoothing
+    Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecs, smoothingScale );
+    
+    
+    
+    % Plotting mesh and scene flow vectors
+    stat = sprintf('========  Plotting Frame %d  ========', FRAME_IND);
+    disp(stat);
     % TODO plot vectors at indexes sceneFlowVecs_InterpIndx red, the others ...
     % green
     
-    Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecs, smoothingScale );
+    
     
     % save NEXT frame mesh as ply
+    stat = sprintf('========  Saving Frame %d  ========', FRAME_IND);
+    disp(stat);
+    
     ply_filename = sprintf('mesh_frame_%d.ply', FRAME_IND+1);
     ply_data = tri_mesh_to_ply ( Verts_Tnext, BaseMesh_ConnectivityList );
     ply_write ( ply_data, ply_filename,'ascii', 'double' );
 
+    
+    
     % set result mesh of this iteration to current mesh of next!
     Verts_Tcurr = Verts_Tnext;
 end
