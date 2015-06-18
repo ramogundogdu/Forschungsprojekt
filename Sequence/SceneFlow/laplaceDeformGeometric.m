@@ -1,4 +1,4 @@
-function [ VertsOut_xyz ] = laplaceDeformGeometric( ConnectivityList, VertsT0_xyz, VertsFixedT1_xyz )
+function [ VertsOut_xyz, WM ] = laplaceDeformGeometric( ConnectivityList, VertsT0_xyz, VertsFixedT1_xyz )
 % Coordinate deformation / smoothing through laplacian operation
 
 % ConnectivityList: -
@@ -170,6 +170,7 @@ disp('-------- building laplace');
     
 % ================= RECONSTRUCTION of absolute coordinates
 
+% !!! don't alter WM from here on. It must be exported in this form
 M = WM;
 
 % add constraints

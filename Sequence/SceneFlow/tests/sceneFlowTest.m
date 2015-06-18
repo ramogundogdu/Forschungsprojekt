@@ -39,9 +39,7 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 % (laplaceDeformGeomatric.m)
 
 % - laplace deform the mesh at T0 to T1, thus interpolating missing depth
-% information from reconstruction
-% TODO in laplaceDeformGeomatric.m: check for invalid indizies! --> weight
-% matrix
+% information from reconstruction+
 
 % - smooth resulting mesh with "the other" laplace algorithm, in compliance
 % to the template mesh (not present in this scenario - should be really
@@ -57,9 +55,22 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat']);
 tic
 disp('Ressources loaded - starting');
 
-Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
+% Mesh_Vertex_Tnext_xyz  = nextFrameVertexPositions( Mesh_Vertex_xyz, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, Callib_Versuch3_Cut_Complete_L2R);
 
-Mesh_Vertex_deformed_xyz = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_Tnext_xyz);
+
+% % return weight matrix as well
+[Mesh_Vertex_deformed_xyz, weightedLaplace] = laplaceDeformGeometric(Mesh_ConnectivityList, Mesh_Vertex_xyz, Mesh_Vertex_Tnext_xyz);
+
+
+% AT FIRST FRAME (Base mesh), save LT * L for smoothing
+LTL = weightedLaplace' * weightedLaplace;
+
+% smoothing
+sceneFlowVs = sceneFlowVectors( Mesh_Vertex_xyz, Mesh_Vertex_deformed_xyz );
+
+% TODO separate base mesh
+Mesh_Vertex_final = laplaceSmooth( Mesh_Vertex_xyz, Mesh_Vertex_xyz, LTL, sceneFlowVs, 1 )
+
 
 disp('done!');
 toc

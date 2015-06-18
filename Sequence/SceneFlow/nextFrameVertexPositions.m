@@ -24,12 +24,17 @@ disp('--- starting: nextFrameVertexPositions');
 % intrinsic parameters of left camera
 K = stereoParams.CameraParameters1.IntrinsicMatrix';
 % projection matrix
-M = [K [0;0;0]]
+M = [K [0;0;0]];
 
 
 % get bounding box for all dimensions
 % 3x2 matrix [xMin,xMax;yMin,yMax;zMin,zMax]
 bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
+% add padding to bb
+bPadding = 20;
+bb(:,1) =  bb(:,1) - bPadding;
+bb(:,2) =  bb(:,2) + bPadding;
+
 
 % TODO add variable padding to the bounding box
 
@@ -73,8 +78,8 @@ for vI=2:numVerts
         );
     end
     
-    % if(isInvalid || isOutOfBounds) 
-    if(isInvalid) 
+    if(isInvalid || isOutOfBounds) 
+    %if(isInvalid) 
         continue;
     else
         Mesh_Vertex_Tnext_xyz(:,vI) = nextV;
