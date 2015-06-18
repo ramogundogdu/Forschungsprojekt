@@ -65,24 +65,32 @@ disp('Ressources loaded - starting');
 % LTL = weightedLaplace' * weightedLaplace;
 % 
 % % smoothing
-%[sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
+[sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
 % TODO plot vectors at indexes sceneFlowVecs_InterpIndx red, the others ...
 % green
+figure;
+tf=sceneFlowVecs_InterpIndx==0; % <- color is different for U<0 and U>=0
+quiver3(...
+    VertsSmoothed_Tnext(1,sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(2,sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(3,sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(1,sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(2,sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(3,sceneFlowVecs_InterpIndx)',...
+    'color',[1,0,0],'linewidth',0.5)
 
 
 % TODO separate base mesh
 % VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 
 % write ply file
-ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
-plyName = sprintf('frame_%d.ply', 22);
-ply_write ( ply_data, plyName,'ascii', 'double' );
+% ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
+% plyName = sprintf('frame_%d.ply', 22);
+% ply_write ( ply_data, plyName,'ascii', 'double' );
 
 
 disp('done!');
 toc
-
-
 
 % save 'sceneFlowTest_firstInterpolationRun' Mesh_Vertex_Tnext_xyz Mesh_Vertex_deformed_xyz -v7.3;
 % ===========================
@@ -96,7 +104,20 @@ toc
 % axis equal;
 
 % 
-% figure;
-% trisurf ( BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
-% axis equal;
+hold on
+tf=~tf;
+quiver3(...
+    VertsSmoothed_Tnext(1,~sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(2,~sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(3,~sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(1,~sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(2,~sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(3,~sceneFlowVecs_InterpIndx)',...
+'color',[0,1,0],'linewidth',1)
+
+
+trisurf (BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
+colormap(bone);
+hold off
+axis equal;
 % 
