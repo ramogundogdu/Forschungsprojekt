@@ -1,7 +1,8 @@
 % =============== Load ressources ==================
 
 % Callibration
-load('Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat');
+%load('Versuch3_final/Callib_Versuch3_Cut_Complete_L2R.mat');
+load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R_EXPORT.mat']);
 
 % depth maps / point clouds for each frame
 load('Data_HD_5sec/DepthMapCell_5sec_v1.mat');
@@ -44,7 +45,7 @@ for FRAME_IND = 1:NUM_FRAMES-1
     CURR_FLOWCELL = UVFlowCell{1, FRAME_IND };
     
     % get CONSTRAINTS - Vertex positions of depth map in next frame
-    VertsConst_Tnext  = nextFrameVertexPositions( Verts_Tcurr, NEXT_DEPTHMAP, CURR_FLOWCELL, Callib_Versuch3_Cut_Complete_L2R);
+    VertsConst_Tnext  = nextFrameVertexPositions( Verts_Tcurr, NEXT_DEPTHMAP, CURR_FLOWCELL, K, blDisp);
     
     % interpolate missing vertex positions
     [VertsDeformed_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, Verts_Tcurr, VertsConst_Tnext);
