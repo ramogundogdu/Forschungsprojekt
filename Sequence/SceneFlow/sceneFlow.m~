@@ -29,7 +29,7 @@ smoothingScale = 0.5;
 Verts_Tcurr = BaseMesh_Verts;
 Verts_Tnext = [];
 
-SceneFlowVectorCell = cell(2, NUM_FRAMES-1);
+SceneFlowVectorCell = cell(2, size(FRAME_IND, 2)-1);
 
 
 disp('======== Ressources loaded - STARTING ========');
@@ -60,9 +60,9 @@ for FRAME_IND = 1:NUM_FRAMES-1
     
     % build scene flow vectors
     [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( Verts_Tcurr, VertsDeformed_Tnext, VertsConst_Tnext ); 
-    
-    SceneFlowVectorCell(1, FRAME_IND) = {sceneFlowVecs};
-    SceneFlowVectorCell(2, FRAME_IND) = {sceneFlowVecs_InterpIndx};
+    [SceneFlowVectorCell] = sceneFlowVecs;
+    UVFlowCell = cell(1, size(RectVidLeftStruct, 2)-1);
+    {SceneFlowVectorWithIndicesCell} = sceneFlowVecs_InterpIndx;
     
     % smoothing
     Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecs, smoothingScale );
