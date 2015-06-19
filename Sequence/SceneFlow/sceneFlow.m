@@ -75,7 +75,7 @@ for FRAME_IND = 1:NUM_FRAMES-1
     
     % plot mesh with scene flow vectors, safe frame for video
     sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, Verts_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
-    sfPlotOut(mi) = sfPlot;
+    sfPlotOut(FRAME_IND) = sfPlot;
     
     % save NEXT frame mesh as ply
     stat = sprintf('========  Saving Frame %d  ========', FRAME_IND);
