@@ -31,11 +31,11 @@ quiver3(...
     sfVs(1,~sfVs_hl_indx & aboveThresh)',...
     sfVs(2,~sfVs_hl_indx & aboveThresh)',...
     sfVs(3,~sfVs_hl_indx & aboveThresh)',...
-'color',[0,1,0],'linewidth',1);
+'color',[1,1,0],'linewidth',1);
 
 % mesh trisurf
 trisurf (Mesh_connect', Mesh_Verts(1,:), Mesh_Verts(2,:), Mesh_Verts(3,:) );
-colormap(bone);
+colormap(winter);
 
 hold off
 

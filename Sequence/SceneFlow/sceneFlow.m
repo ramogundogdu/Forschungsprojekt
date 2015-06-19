@@ -28,7 +28,7 @@ smoothingScale = 0.5;
 % vertex containers
 Verts_Tcurr = BaseMesh_Verts;
 Verts_Tnext = [];
-
+% scene flow vectors export cell
 SceneFlowVectorCell = cell(2, NUM_FRAMES-1);
 
 
@@ -36,7 +36,7 @@ disp('======== Ressources loaded - STARTING ========');
 tic
 
 % =============== Main loop ==================
-
+figure('MenuBar','none', 'Position', [0,0,2048,2048]);
 
 for FRAME_IND = 1:NUM_FRAMES-1
     
@@ -102,6 +102,6 @@ disp('======== Saving Data ========');
 % save scene fow vectors
 save 'SceneFlowData' SceneFlowVectorCell -v7.3;
 % DATA save movie
-movie2avi(sfPlotOut,'SceneFlowData.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
+movie2avi(sfPlotOut, 'SceneFlowData.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
 
 disp('======== REALLY DONE !! ========');

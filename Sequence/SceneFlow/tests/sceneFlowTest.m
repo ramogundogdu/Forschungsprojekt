@@ -78,7 +78,7 @@ disp('Ressources loaded - starting');
 % % TODO separate base mesh
 % VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 % 
-
+figure('MenuBar','none', 'Position', [0,0,2048,2048]);
 for mi=1:10
 sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, VertsSmoothed_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
 sfPlotOut(mi) = sfPlot;
