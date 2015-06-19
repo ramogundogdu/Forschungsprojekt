@@ -79,9 +79,12 @@ disp('Ressources loaded - starting');
 % VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 % 
 
+for mi=1:10
+sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, VertsSmoothed_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
+sfPlotOut(mi) = sfPlot;
+end
 
-sceneFlowPlot( BaseMesh_ConnectivityList, VertsSmoothed_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
-
+movie2avi(sfPlotOut,'sfplotetst.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
 
 
 % %write ply file

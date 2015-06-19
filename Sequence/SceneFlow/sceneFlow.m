@@ -72,10 +72,10 @@ for FRAME_IND = 1:NUM_FRAMES-1
     % Plotting mesh and scene flow vectors
     stat = sprintf('========  Plotting Frame %d  ========', FRAME_IND);
     disp(stat);
-    % TODO plot vectors at indexes sceneFlowVecs_InterpIndx red, the others ...
-    % green
     
-    
+    % plot mesh with scene flow vectors, safe frame for video
+    sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, Verts_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
+    sfPlotOut(mi) = sfPlot;
     
     % save NEXT frame mesh as ply
     stat = sprintf('========  Saving Frame %d  ========', FRAME_IND);
@@ -99,8 +99,9 @@ disp('======== DONE ========');
 
 disp('======== Saving Data ========');
 
+% save scene fow vectors
 save 'SceneFlowData' SceneFlowVectorCell -v7.3;
-
 % DATA save movie
+movie2avi(sfPlotOut,'SceneFlowData.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
 
 disp('======== REALLY DONE !! ========');
