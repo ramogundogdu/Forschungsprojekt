@@ -11,7 +11,7 @@ load('Data_HD_5sec/DepthMapCell_5sec_v1.mat');
 load('Data_HD_5sec/OFlow_links_HD_5sec_rect_v1.mat');
 
 % Base mesh
-Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
+Ply_file = 'SceneFlowTestData/Mesh_Bidirectional_Final.ply';
 [ BaseMesh_ConnectivityList, BaseMesh_Verts ] = ply_read ( Ply_file, 'tri' );
 
 % number of frames, according to depth map count
@@ -95,4 +95,12 @@ end
 % =============== END Main loop ==================
 
 toc
-disp('======== DONE!!! ========');
+disp('======== DONE ========');
+
+disp('======== Saving Data ========');
+
+save 'SceneFlowData' SceneFlowVectorCell -v7.3;
+
+% DATA save movie
+
+disp('======== REALLY DONE !! ========');
