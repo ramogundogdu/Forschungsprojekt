@@ -1,4 +1,4 @@
-function [ Mesh_Vertex_Tnext_xyz ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr_xyz, DepthMap_Tnext, UVFlowMap, stereoParams)
+function [ Mesh_Vertex_Tnext_xyz ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr_xyz, DepthMap_Tnext, UVFlowMap, K, blDisp)
 % Returns the positions of the given verticies in the following frame
 
 % IN
@@ -12,6 +12,7 @@ function [ Mesh_Vertex_Tnext_xyz ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr
 % stereoParams:             stereoParameters object. used to get projection
 %                           matrix and compute repojection onto the 2D
 %                           UVFlowMap
+% K, blDisp:                compatible stereoParams, without toolbox
 % DepthMap_Tnext:           NxMx3 matrix, with frame image / UVFlowMap
 %                           DepthMap_Tnext. Contains depth informations
 %                           for certain pixels in frame at T1. May contain
@@ -22,16 +23,21 @@ function [ Mesh_Vertex_Tnext_xyz ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr
 disp('--- starting: nextFrameVertexPositions');
 
 % intrinsic parameters of left camera
-K = stereoParams.CameraParameters1.IntrinsicMatrix';
+% K = stereoParams.CameraParameters1.IntrinsicMatrix';
 % projection matrix
 M = [K [0;0;0]];
 % baseline displacement
-blDisp = round(stereoParams.TranslationOfCamera2(1,1)/2);
+% blDisp = round(stereoParams.TranslationOfCamera2(1,1)/2);
 
 
 % get bounding box for all dimensions
 % 3x2 matrix [xMin,xMax;yMin,yMax;zMin,zMax]
-bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
+% bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
+% compatibility
+bmax = ceil(max(Mesh_Vertex_Tcurr_xyz,[],2));
+bmin = ceil(min(Mesh_Vertex_Tcurr_xyz,[],2));
+bb = [bmin bmax];
+
 % add padding to bb
 bPadding = 0;
 bb(:,1) =  bb(:,1) - bPadding;
