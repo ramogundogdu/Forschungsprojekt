@@ -71,6 +71,8 @@ disp('Ressources loaded - starting');
 % längen der spaltenvektoren: sqrt(sum(abs(sceneFlowVecs).^2,1))
 % sfvMed = sceneFlowVecs(:, norms(:, norms > ceil(ans)));
 % sfvMed = sceneFlowVecs(:, norms > ans);
+N=1; % Number of frames
+for i = 1:N
 figure;
 tf=sceneFlowVecs_InterpIndx==0; % <- color is different for U<0 and U>=0
 quiver3(...
@@ -96,8 +98,11 @@ quiver3(...
 trisurf (BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
 colormap(bone);
 hold off
+view([360 270]);
 axis equal;
-
+M(i)=getframe(gcf);
+end
+movie2avi(M,'FaceMovie.avi');
 % TODO separate base mesh
 % VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 
