@@ -52,8 +52,8 @@ Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
 % for each vertex in Mesh_Vertex_Tcurr_xyz
 for vI=1:numVerts
     
-    str = sprintf('----  Vertex %d of %d  ----', vI, numVerts);
-    disp(str);
+    % str = sprintf('----  Vertex %d of %d  ----', vI, numVerts);
+    % disp(str);
     
     % === get projected 2D-coords of vertex
     % get vertex
