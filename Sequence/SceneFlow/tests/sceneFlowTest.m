@@ -7,8 +7,8 @@
 
 load(['SceneFlowTestData/SceneFlowTestData.mat']);
 
-Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
-%Ply_file = 'SceneFlowTestData/BidirectionalMesh_small.ply';
+%Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
+Ply_file = 'SceneFlowTestData/BidirectionalMesh_small.ply';
 
 % load callibration data
 
@@ -57,14 +57,14 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R_EXPORT.mat']);
 tic
 disp('Ressources loaded - starting');
 % 
-% VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, K, blDisp);
-% % 
-% % return weight matrix as well
-% [Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
+VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, K, blDisp);
 % 
-% 
-% % AT FIRST FRAME (Base mesh), save LT * L for smoothing
-% LTL = weightedLaplace' * weightedLaplace;
+% return weight matrix as well
+[Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
+
+
+% AT FIRST FRAME (Base mesh), save LT * L for smoothing
+LTL = weightedLaplace' * weightedLaplace;
 
 % % smoothing
  [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
@@ -73,24 +73,76 @@ disp('Ressources loaded - starting');
 % längen der spaltenvektoren: sqrt(sum(abs(sceneFlowVecs).^2,1))
 % sfvMed = sceneFlowVecs(:, norms(:, norms > ceil(ans)));
 % sfvMed = sceneFlowVecs(:, norms > ans);
+<<<<<<< HEAD
+N=1; % Number of frames
+for i = 1:N
+figure;
+tf=sceneFlowVecs_InterpIndx==0; % <- color is different for U<0 and U>=0
+quiver3(...
+    VertsSmoothed_Tnext(1,sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(2,sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(3,sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(1,sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(2,sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(3,sceneFlowVecs_InterpIndx)',...
+    'color',[1,0,0],'linewidth',0.5)
+hold on
+tf=~tf;
+quiver3(...
+    VertsSmoothed_Tnext(1,~sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(2,~sceneFlowVecs_InterpIndx)',...
+    VertsSmoothed_Tnext(3,~sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(1,~sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(2,~sceneFlowVecs_InterpIndx)',...
+    sceneFlowVecs(3,~sceneFlowVecs_InterpIndx)',...
+'color',[0,1,0],'linewidth',1)
 
 
-% % TODO separate base mesh
-% VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
-% 
-figure('MenuBar','none', 'Position', [0,0,2048,2048]);
-for mi=1:10
-sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, VertsSmoothed_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
-sfPlotOut(mi) = sfPlot;
+trisurf (BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
+colormap(bone);
+hold off
+view([360 270]);
+axis equal;
+M(i)=getframe(gcf);
 end
+movie2avi(M,'FaceMovie.avi');
+=======
 
-movie2avi(sfPlotOut,'sfplotetst.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
+% figure;
+% tf=sceneFlowVecs_InterpIndx==0; % <- color is different for U<0 and U>=0
+% quiver3(...
+%     VertsSmoothed_Tnext(1,sceneFlowVecs_InterpIndx)',...
+%     VertsSmoothed_Tnext(2,sceneFlowVecs_InterpIndx)',...
+%     VertsSmoothed_Tnext(3,sceneFlowVecs_InterpIndx)',...
+%     sceneFlowVecs(1,sceneFlowVecs_InterpIndx)',...
+%     sceneFlowVecs(2,sceneFlowVecs_InterpIndx)',...
+%     sceneFlowVecs(3,sceneFlowVecs_InterpIndx)',...
+%     'color',[1,0,0],'linewidth',0.5)
+% hold on
+% tf=~tf;
+% quiver3(...
+%     VertsSmoothed_Tnext(1,~sceneFlowVecs_InterpIndx)',...
+%     VertsSmoothed_Tnext(2,~sceneFlowVecs_InterpIndx)',...
+%     VertsSmoothed_Tnext(3,~sceneFlowVecs_InterpIndx)',...
+%     sceneFlowVecs(1,~sceneFlowVecs_InterpIndx)',...
+%     sceneFlowVecs(2,~sceneFlowVecs_InterpIndx)',...
+%     sceneFlowVecs(3,~sceneFlowVecs_InterpIndx)',...
+% 'color',[0,1,0],'linewidth',1)
+% 
+% 
+% trisurf (BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
+% colormap(bone);
+% hold off
+% axis equal;
 
+>>>>>>> aad117ef9c46bfff8594c24405869b4fcab4968a
+% TODO separate base mesh
+VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 
-% %write ply file
-% ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
-% plyName = sprintf('frame_%d.ply', 22);
-% ply_write ( ply_data, plyName,'ascii', 'double' );
+%write ply file
+ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
+plyName = sprintf('frame_%d.ply', 22);
+ply_write ( ply_data, plyName,'ascii', 'double' );
 
 
 disp('done!');
@@ -100,18 +152,17 @@ toc
 % ===========================
 
 % OLD
-% trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
-% axis equal;
-% 
-% figure;
-% trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
-% axis equal; 
-% 
-% figure;
-% trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
-% axis equal;
-% 
-% figure;
-% trisurf ( BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
-% axis equal;
+trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
+axis equal;
 
+figure;
+trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
+axis equal; 
+
+figure;
+trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
+axis equal;
+
+figure;
+trisurf ( BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
+axis equal;
