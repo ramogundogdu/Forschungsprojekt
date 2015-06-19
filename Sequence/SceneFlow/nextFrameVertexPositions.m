@@ -32,7 +32,12 @@ M = [K [0;0;0]];
 
 % get bounding box for all dimensions
 % 3x2 matrix [xMin,xMax;yMin,yMax;zMin,zMax]
-bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
+% bb = ceil( minmax(Mesh_Vertex_Tcurr_xyz) );
+% compatibility
+bmax = ceil(max(Mesh_Vertex_Tcurr_xyz,[],2));
+bmin = ceil(min(Mesh_Vertex_Tcurr_xyz,[],2));
+bb = [bmin bmax];
+
 % add padding to bb
 bPadding = 0;
 bb(:,1) =  bb(:,1) - bPadding;
