@@ -7,7 +7,8 @@
 
 load(['SceneFlowTestData/SceneFlowTestData.mat']);
 
-Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
+%Ply_file = 'SceneFlowTestData/Pointcloud_sfTestData_mesh_ascii.ply';
+Ply_file = 'SceneFlowTestData/BidirectionalMesh_small.ply';
 
 % load callibration data
 
@@ -58,20 +59,21 @@ disp('Ressources loaded - starting');
 % 
 VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, K, blDisp);
 % 
-% % return weight matrix as well
-% [Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
-% 
-% 
-% % AT FIRST FRAME (Base mesh), save LT * L for smoothing
-% LTL = weightedLaplace' * weightedLaplace;
-% 
+% return weight matrix as well
+[Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
+
+
+% AT FIRST FRAME (Base mesh), save LT * L for smoothing
+LTL = weightedLaplace' * weightedLaplace;
+
 % % smoothing
-% [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
+ [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
 % TODO plot vectors at indexes sceneFlowVecs_InterpIndx red, the others ...
 % green
 % längen der spaltenvektoren: sqrt(sum(abs(sceneFlowVecs).^2,1))
 % sfvMed = sceneFlowVecs(:, norms(:, norms > ceil(ans)));
 % sfvMed = sceneFlowVecs(:, norms > ans);
+
 % figure;
 % tf=sceneFlowVecs_InterpIndx==0; % <- color is different for U<0 and U>=0
 % quiver3(...
@@ -100,12 +102,12 @@ VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2fram
 % axis equal;
 
 % TODO separate base mesh
-% VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
+VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
 
-% write ply file
-% ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
-% plyName = sprintf('frame_%d.ply', 22);
-% ply_write ( ply_data, plyName,'ascii', 'double' );
+%write ply file
+ply_data = tri_mesh_to_ply ( VertsSmoothed_Tnext, BaseMesh_ConnectivityList );
+plyName = sprintf('frame_%d.ply', 22);
+ply_write ( ply_data, plyName,'ascii', 'double' );
 
 
 disp('done!');
@@ -115,13 +117,18 @@ toc
 % ===========================
 
 % OLD
-% trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
-% axis equal;
-
-% figure;
-% trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
-% axis equal;
+trisurf ( BaseMesh_ConnectivityList', BaseMesh_Verts(1,:), BaseMesh_Verts(2,:), BaseMesh_Verts(3,:) );
+axis equal;
 
 figure;
 trisurf ( BaseMesh_ConnectivityList', VertsConst_Tnext(1,:), VertsConst_Tnext(2,:), VertsConst_Tnext(3,:) );
 axis equal; 
+
+figure;
+trisurf ( BaseMesh_ConnectivityList', Verts_Tnext(1,:), Verts_Tnext(2,:), Verts_Tnext(3,:) );
+axis equal;
+
+figure;
+trisurf ( BaseMesh_ConnectivityList', VertsSmoothed_Tnext(1,:), VertsSmoothed_Tnext(2,:), VertsSmoothed_Tnext(3,:) );
+axis equal;
+
