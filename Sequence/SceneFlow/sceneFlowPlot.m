@@ -45,5 +45,12 @@ hold off
 axis equal;
 
 
+% view([360 270]);
+% axis equal;
+% M(i)=getframe(gcf);
+% end
+% movie2avi(M,'FaceMovie.avi');
+
+
 end
 
