@@ -20,6 +20,8 @@ if(~V1IsValid)
     error('Verts1 must only contain valid entries');
 end
 
+disp(' --- replacing with constraints --- ');
+
 V2ValidIndx = any( ~isnan(Verts2) );
 
 VertsOut = Verts1;
