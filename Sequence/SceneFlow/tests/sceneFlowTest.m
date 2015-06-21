@@ -57,34 +57,35 @@ load(['Versuch3_final/Callib_Versuch3_Cut_Complete_L2R_EXPORT.mat']);
 tic
 disp('Ressources loaded - starting');
 % 
-% VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, K, blDisp);
-% % 
-% % return weight matrix as well
-% [Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
+VertsConst_Tnext  = nextFrameVertexPositions( BaseMesh_Verts, DepthMapCell_2frames{1,2}, UVFlowCell_2frames{1,1}, K, blDisp);
 % 
+% return weight matrix as well
+[Verts_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, BaseMesh_Verts, VertsConst_Tnext);
+
+% put back in contraint coordinates to minimize drift ( TEST ! )
+Verts_Tnext = replaceVerticies( Verts_Tnext, VertsConst_Tnext );
+
 % 
-% % AT FIRST FRAME (Base mesh), save LT * L for smoothing
-% LTL = weightedLaplace' * weightedLaplace;
+% AT FIRST FRAME (Base mesh), save LT * L for smoothing
+LTL = weightedLaplace' * weightedLaplace;
 
-% % smoothing
- [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
-% TODO plot vectors at indexes sceneFlowVecs_InterpIndx red, the others ...
-% green
-% längen der spaltenvektoren: sqrt(sum(abs(sceneFlowVecs).^2,1))
-% sfvMed = sceneFlowVecs(:, norms(:, norms > ceil(ans)));
-% sfvMed = sceneFlowVecs(:, norms > ans);
+% smoothing
+[sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( BaseMesh_Verts, Verts_Tnext, VertsConst_Tnext );
 
 
-% % TODO separate base mesh
-% VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
+
+% TODO separate base mesh
+VertsSmoothed_Tnext = laplaceSmooth( BaseMesh_Verts, BaseMesh_Verts, LTL, sceneFlowVecs, 0.25 );
+
+
+
+% figure('MenuBar','none', 'Position', [0,0,2048,2048]);
+% for mi=1:10
+% sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, VertsSmoothed_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
+% sfPlotOut(mi) = sfPlot;
+% end
 % 
-figure('MenuBar','none', 'Position', [0,0,2048,2048]);
-for mi=1:10
-sfPlot = sceneFlowPlot( BaseMesh_ConnectivityList, VertsSmoothed_Tnext, sceneFlowVecs, sceneFlowVecs_InterpIndx );
-sfPlotOut(mi) = sfPlot;
-end
-
-movie2avi(sfPlotOut,'sfplotetst.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
+% movie2avi(sfPlotOut,'sfplotetst.avi', 'compression', 'None', 'fps', 25, 'quality', 100);
 
 
 % %write ply file
