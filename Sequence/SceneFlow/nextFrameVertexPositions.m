@@ -44,8 +44,11 @@ bb(:,1) =  bb(:,1) - bPadding;
 bb(:,2) =  bb(:,2) + bPadding;
 
 
-% TODO add variable padding to the bounding box
+% Error feedback vars
+[UVFlowMapHeight, UVFlowMapWidth] = size(UVFlowMap);
+[DepthMap_TnextHeight, DepthMap_TnextWidth] = size(DepthMap_Tnext);
 
+% init vars
 numVerts = size(Mesh_Vertex_Tcurr_xyz, 2);
 Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
 
@@ -64,14 +67,28 @@ for vI=1:numVerts
     currP = currP./currP(3,1);
     currP = round(currP(1:2,1)); % rounded values!
      
+    
+    % ERROR FEEDBACK - check if currP lies in image dimensions (flow map)
+    if(currP(1,1) < 1 || currP(1,1) > UVFlowMapWidth || currP(2,1) < 1 || currP(2,1) > UVFlowMapHeight)
+        error('Projected 2D-Point coords out of FlowMap dimensions (x: %d, y: %d) | Vertex id: %d', currP(1,1), currP(2,1), vI);
+    end
+        
+    
     % === get flow vector
-    flowV = squeeze(UVFlowMap( currP(2,1) , currP(1,1), :));%y=row, x=col
+    flowV = squeeze(UVFlowMap( currP(2,1) , currP(1,1), :)); %y=row, x=col
     flowV = round(flowV); % TODO --- rounding?
     
     % === get next 2D coord
     % adjust baseline displacement in x
     currP(1,1) = currP(1,1) - blDisp;
     nextP = currP + flowV; % TEST - no flow
+    
+    
+    % ERROR FEEDBACK - check if nextP lies in image dimensions (depth map)
+    if(nextP(1,1) < 1 || nextP(1,1) > DepthMap_TnextWidth || nextP(2,1) < 1 || nextP(2,1) > DepthMap_TnextHeight)
+        error('Flow 2D-Point coords out of DepthMap dimensions (x: %d, y: %d) | Vertex id: %d', nextP(1,1), nextP(2,1), vI);
+    end
+    
     
     % === get new vertex pos from depth map    
     nextV = squeeze(DepthMap_Tnext( nextP(2,1), nextP(1,1), : ));
@@ -98,7 +115,6 @@ for vI=1:numVerts
 end
 
 disp('--- done: nextFrameVertexPositions');
-%Mesh_Vertex_Tnext_xyz = NaN(size(Mesh_Vertex_Tcurr_xyz));
 
 end
 
