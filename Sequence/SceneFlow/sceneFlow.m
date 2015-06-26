@@ -24,12 +24,14 @@ end
 
 % scale factor for smoothing
 smoothingScale = 0.5;
+% index of fixed anchor vertex of the base mesh
+fixedVertInd = 3187;
 
 % vertex containers
 Verts_Tcurr = BaseMesh_Verts;
 Verts_Tnext = [];
 % scene flow vectors export cell
-SceneFlowVectorCell = cell(2, NUM_FRAMES-1);
+SceneFlowVectorCell = cell(3, NUM_FRAMES-1);
 
 
 disp('======== Ressources loaded - STARTING ========');
@@ -51,6 +53,9 @@ for FRAME_IND = 1:NUM_FRAMES-1
     
     % interpolate missing vertex positions
     [VertsDeformed_Tnext, weightedLaplace] = laplaceDeformGeometric(BaseMesh_ConnectivityList, Verts_Tcurr, VertsConst_Tnext);
+    %[VertsDeformed_Tnext, weightedLaplace] = laplaceDeformGeometricFixed(BaseMesh_ConnectivityList, Verts_Tcurr, VertsConst_Tnext, fixedVertInd);
+    
+    
     
     % at first frame (Base mesh), build LTL for smoothing
     if(FRAME_IND == 1)
@@ -60,16 +65,19 @@ for FRAME_IND = 1:NUM_FRAMES-1
     
     % override deformed/interpolated verticies with constraints of depth map to minimize
     % drift (TRYOUT)
-    VertsDeformed_Tnext = replaceVerticies( VertsDeformed_Tnext, VertsConst_Tnext );
+    % VertsDeformed_Tnext = replaceVerticies( VertsDeformed_Tnext, VertsConst_Tnext );
     
     % build scene flow vectors
     [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( Verts_Tcurr, VertsDeformed_Tnext, VertsConst_Tnext ); 
+    % filter scene flow vectors to median lenght to avoid outliers
+    sceneFlowVecsFiltered = filterSceneFlowMedian( sceneFlowVecs );
     
     SceneFlowVectorCell(1, FRAME_IND) = {sceneFlowVecs};
     SceneFlowVectorCell(2, FRAME_IND) = {sceneFlowVecs_InterpIndx};
+    SceneFlowVectorCell(3, FRAME_IND) = {sceneFlowVecsFiltered};
     
     % smoothing
-    Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecs, smoothingScale );
+    Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecsFiltered, smoothingScale );
     
     
     
