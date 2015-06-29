@@ -1,4 +1,4 @@
-function [ Mesh_Vertex_Tnext_xyz ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr_xyz, DepthMap_Tnext, UVFlowMap, K, blDisp)
+function [ Mesh_Vertex_Tnext_xyz_filtered ] = nextFrameVertexPositions( Mesh_Vertex_Tcurr_xyz, DepthMap_Tnext, UVFlowMap, K, blDisp)
 % Returns the positions of the given verticies in the following frame
 
 % IN
@@ -51,6 +51,8 @@ bb(:,2) =  bb(:,2) + bPadding;
 % init vars
 numVerts = size(Mesh_Vertex_Tcurr_xyz, 2);
 Mesh_Vertex_Tnext_xyz = NaN(3, numVerts);
+Mesh_Vertex_Tnext_xyz_filtered = NaN(3, numVerts);
+
 
 % for each vertex in Mesh_Vertex_Tcurr_xyz
 for vI=1:numVerts
@@ -113,6 +115,18 @@ for vI=1:numVerts
     end
     
 end
+
+disp('--- filtering contraints');
+
+% scene flow vectors to constraints
+[sceneFlowVecs] = sceneFlowVectors( Mesh_Vertex_Tcurr_xyz, Mesh_Vertex_Tnext_xyz ); 
+% filter for median
+aboveThreshIndx = filterSceneFlowMedian( sceneFlowVecs );
+
+% set contstraints of filtered scene flow vectors to NAN
+Mesh_Vertex_Tnext_xyz_filtered(:,aboveThreshIndx) = Mesh_Vertex_Tnext_xyz(:, aboveThreshIndx);
+
+
 
 disp('--- done: nextFrameVertexPositions');
 

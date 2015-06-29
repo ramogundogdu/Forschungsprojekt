@@ -12,7 +12,13 @@ if( size(VertsFrom,2) ~= size(VertsTo, 2) )
 end
 
 SFV = VertsTo - VertsFrom;
-SFV_InterpIndx = any(isnan(VertsTo_raw));
+
+if(nargin > 2)
+    SFV_InterpIndx = any(isnan(VertsTo_raw));
+else
+    SFV_InterpIndx = zeros(1, size(VertsTo,2));
+end
+
 
 end
 

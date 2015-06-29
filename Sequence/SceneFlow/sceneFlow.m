@@ -31,7 +31,7 @@ fixedVertInd = 3187;
 Verts_Tcurr = BaseMesh_Verts;
 Verts_Tnext = [];
 % scene flow vectors export cell
-SceneFlowVectorCell = cell(3, NUM_FRAMES-1);
+SceneFlowVectorCell = cell(2, NUM_FRAMES-1);
 
 
 disp('======== Ressources loaded - STARTING ========');
@@ -70,14 +70,14 @@ for FRAME_IND = 1:NUM_FRAMES-1
     % build scene flow vectors
     [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( Verts_Tcurr, VertsDeformed_Tnext, VertsConst_Tnext ); 
     % filter scene flow vectors to median lenght to avoid outliers
-    sceneFlowVecsFiltered = filterSceneFlowMedian( sceneFlowVecs );
+   % sceneFlowVecsFiltered = filterSceneFlowMedian( sceneFlowVecs );
     
     SceneFlowVectorCell(1, FRAME_IND) = {sceneFlowVecs};
     SceneFlowVectorCell(2, FRAME_IND) = {sceneFlowVecs_InterpIndx};
-    SceneFlowVectorCell(3, FRAME_IND) = {sceneFlowVecsFiltered};
+   % SceneFlowVectorCell(3, FRAME_IND) = {sceneFlowVecsFiltered};
     
     % smoothing
-    Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecsFiltered, smoothingScale );
+    Verts_Tnext = laplaceSmooth( BaseMesh_Verts, Verts_Tcurr, LTL, sceneFlowVecs, smoothingScale );
     
     
     
