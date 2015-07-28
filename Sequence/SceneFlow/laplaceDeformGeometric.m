@@ -128,7 +128,8 @@ disp('-------- building laplace');
     dX = WM * VertsT0_xyz(1,:)';
     dY = WM * VertsT0_xyz(2,:)';
     dZ = WM * VertsT0_xyz(3,:)';
-    
+
+% OLD:
 %     dX = zeros(numVerts,1);
 %     dY = zeros(numVerts,1);
 %     dZ = zeros(numVerts,1);
@@ -211,7 +212,7 @@ for vI=1:numVertsFixed
     % increase counter for inserted constraints
     constItCount = constItCount + 1;
     
-    % OLD
+    % OLD:
     %
     % constRow = zeros(1,numVerts);
     % constRow(1, vI) = 1;

@@ -63,14 +63,15 @@ for FRAME_IND = 1:NUM_FRAMES-1
        LTL = weightedLaplace' * weightedLaplace;
     end
     
-    % override deformed/interpolated verticies with constraints of depth map to minimize
+    % OLD: override deformed/interpolated verticies with constraints of depth map to minimize
     % drift (TRYOUT)
     % VertsDeformed_Tnext = replaceVerticies( VertsDeformed_Tnext, VertsConst_Tnext );
     
     % build scene flow vectors
     [sceneFlowVecs, sceneFlowVecs_InterpIndx] = sceneFlowVectors( Verts_Tcurr, VertsDeformed_Tnext, VertsConst_Tnext ); 
-    % filter scene flow vectors to median lenght to avoid outliers
-   % sceneFlowVecsFiltered = filterSceneFlowMedian( sceneFlowVecs );
+    
+    % OLD: filter scene flow vectors to median lenght to avoid outliers
+    % sceneFlowVecsFiltered = filterSceneFlowMedian( sceneFlowVecs );
     
     SceneFlowVectorCell(1, FRAME_IND) = {sceneFlowVecs};
     SceneFlowVectorCell(2, FRAME_IND) = {sceneFlowVecs_InterpIndx};
